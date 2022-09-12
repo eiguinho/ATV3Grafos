@@ -55,51 +55,53 @@ def calcDensidade(matriz):
     print('A densidade dessa matriz é: ', result, '\n')
     return result
 
+# insere aresta nos pontos vi e vj, onde é realizada de forma simetricamente, depois retorna a matriz atualizada
 def insereAresta(matriz, vi, vj):
     matriz[vi][vj] += 1
     matriz[vj][vi] += 1
     print('Aresta entre',vi, 'e', vj, 'inserida \n')
     return matriz
 
+# a função insere vertice recebe o id do vertice a ser criado e atualiza a matriz com o mesmo
 def insereVertice(matriz, vi):
-    qtdVertices = np.shape(matriz)[0]
-    strg = ""
+    qtdVertices = np.shape(matriz)[0] # recebe a qtd de vertice
+    strg = "" #string usada para criar a nova matriz
     for v in range(0, qtdVertices+1):  # Para cada vértice vi
         for vj in range(0, qtdVertices+1):  # Para cada vértice vj
             if(v==qtdVertices) or (vj==qtdVertices):
-                strg+= "0 "
+                strg+= "0 " # aqui é onde o vertice esta sendo inserido, com o valor 0 para todas suas posicoes
             else:
-                if (matriz[v][vj] > 0):
+                if (matriz[v][vj] > 0): # se a matriz for maior que 0 ele envia o valor para a string
+                    aux = str(matriz[v][vj]) + " " # recebe o str com uma variavel auxiliar
+                    strg += aux #add na string
+                else:   # se nao for maior, entao é sempre 0, enviando tambem para a string
                     aux = str(matriz[v][vj]) + " "
                     strg += aux
-                else:
-                    aux = str(matriz[v][vj]) + " "
-                    strg += aux
-        strg += "\n"
-    s = StringIO(strg)
-    data = np.genfromtxt(s)
+        strg += "\n"    # pula uma linha na string
+    s = StringIO(strg) # transforma a string para a matriz
+    data = np.genfromtxt(s) # nova matriz de adjacencia criada.
     print('Vertice', vi, 'inserida \n')
     return data
 
 def removeAresta(matriz, vi, vj):
-    qtdVertices = np.shape(matriz)[0]
-    tipo = 0
+    qtdVertices = np.shape(matriz)[0] # recebe a qtd de vertice
+    tipo = 0 # tipo simples se nao cair em outro if
     for vi in range(0, qtdVertices):  # Para cada vértice vi
         for vj in range(0, qtdVertices):  # Para cada vértice vj
             if (matriz[vi][vj] != matriz[vj][vi]):  # digrafo, pois a matriz eh assimetrica
-                tipo = 1
+                tipo = 1 # depois de verificar se eh digrafo recebe 1 se sim
     if(tipo == 1):
-        matriz[vi][vj] -=1
-    else:
+        matriz[vi][vj] -=1  # se for digrafo so altera um valor na matriz, pois n é simetrico
+    else:   # se nao for digrafo altera dois valores, pois precisa ter simetria
         matriz[vi][vj] -= 1
         matriz[vj][vi] -= 1
     print('Aresta entre', vi, 'e', vj, 'removida \n')
     return matriz
 
-def removeVertice(matriz, vi):
-    qtdVertices = np.shape(matriz)[0]
-    strg = ""
-    if(vi == qtdVertices):
+def removeVertice(matriz, vi): # funcao que remove um vertice desejado, enviado como parametro
+    qtdVertices = np.shape(matriz)[0] # recebe a qtd de vertice
+    strg = "" #string usada para criar a nova matriz
+    if(vi == qtdVertices): # se o vertice for o ultimo, ele cai aqui, entao so ira mudar a string com a qtdVertices - 1, dessa forma ele ira remover a ultima coluna e linha da matriz, removendo o vertice
         for v in range(0, qtdVertices-1):  # Para cada vértice vi
             for vj in range(0, qtdVertices-1):  # Para cada vértice vj
                 if (matriz[v][vj] > 0):
@@ -109,7 +111,7 @@ def removeVertice(matriz, vi):
                     aux = str(matriz[v][vj]) + " "
                     strg += aux
             strg += "\n"
-    else:
+    else:   # se nao for, ele precisa verificar onde nao passa pelo vertice, pulando quando estiver na posicao dele, removendo dessa forma
         for v in range(0, qtdVertices):  # Para cada vértice vi
             for vj in range(0, qtdVertices):  # Para cada vértice vj
                 if (v != vi) and (vj != vi):
@@ -121,8 +123,8 @@ def removeVertice(matriz, vi):
                         strg += aux
             if(v!=vi):
                 strg += "\n"
-    s = StringIO(strg)
-    data = np.genfromtxt(s)
+    s = StringIO(strg) # transforma a string para a matriz
+    data = np.genfromtxt(s) # nova matriz data
     print('Vertice', vi, 'removido \n')
-    return data
+    return data # matriz atualizada
 
